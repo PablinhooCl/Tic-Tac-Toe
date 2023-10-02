@@ -1,0 +1,61 @@
+
+body{
+    height: 100dvh;
+}.ui{
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+.ui *{
+    margin: 10px;
+}
+
+.gameBoard{
+    height: 50%;
+    width: 50%;
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    grid-template-rows: repeat(3, 1fr);
+    background-color: aqua;
+    align-self: center;
+    border-radius: 5px;
+    padding: 40px;
+    border-radius: 35px;
+    border: 10px solid black;
+    box-shadow:  10px 5px 20px black;
+}
+
+.playerSelec{
+    align-self: center;
+    margin: 20px;
+}
+
+.playerSelec>button{
+    padding: 10px;
+    width: 75px;
+    border-radius: 5px;
+}
+.square{
+    margin: 0px;
+    border-right: solid black 5px;
+    border-bottom: solid black 5px;
+}
+.square-r{
+    margin: 0px;
+    border-bottom: solid black 5px;
+}
+.square-b{
+    margin: 0px;
+    border-right: solid black 5px;
+}
+.gameBoard>div{
+    font-size: 100px;
+    justify-content: center;
+    display: flex;
+    align-items: center;
+    
+}
+p{
+    align-self: center;
+    height: 100%;
+}
