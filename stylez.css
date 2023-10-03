@@ -59,3 +59,12 @@ p{
     align-self: center;
     height: 100%;
 }
+.restart{
+    width: 150px;
+    height: 40px;
+    align-self: center;
+    margin-top: 45px;
+    border-radius: 5px;
+    padding: 10px;
+    
+}
