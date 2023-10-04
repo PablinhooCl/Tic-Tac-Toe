@@ -3,7 +3,6 @@ let gameBoard= [],
 playerId= 'x',
 cpuId= 'o',
 gameResult='',
-whoWin= '',
 winner;
 const gameBoardAdd= (() =>{
 
@@ -37,7 +36,9 @@ const displayController= (() =>{
                 _drawCounter++
             }else{console.log(_drawCounter)};
             if(_drawCounter== 9){
+                if(gameResult== ''){
                 gameResult= 'Draw'
+                }else if(gameResult== 'Winner'){}
             }
         }
     }
@@ -54,7 +55,7 @@ const displayController= (() =>{
                 gameResult = 'Winner';
 
             } else if ((gameBoard[6].innerText == 'x' && gameBoard[6].innerText === gameBoard[7].innerText && gameBoard[7].innerText === gameBoard[8].innerText)
-                || (gameBoard[6].innerText == 'x' && gameBoard[6].innerText === gameBoard[7].innerText && gameBoard[7].innerText === gameBoard[8].innerText)) { // ROW 3
+                || (gameBoard[6].innerText == 'o' && gameBoard[6].innerText === gameBoard[7].innerText && gameBoard[7].innerText === gameBoard[8].innerText)) { // ROW 3
                 winner = gameBoard[6].innerText;
                 gameResult = 'Winner';
 
@@ -90,12 +91,72 @@ const displayController= (() =>{
             console.log(gameResult)
         };
         
-    
+        const winConditioner  =() => {
+            if(gameResult== 'Winner'){
+                if(winner== 'x'){
+                    const _overlay= document.getElementById('overlay');
+                    const _wDisplay= document.getElementById('winDisplay');
+                    _overlay.classList.add('actived');
+                    _wDisplay.classList.add('actived');
+                    _overlay.onclick= function (){ displayController.gameResetter()};
+                    _wDisplay.onclick= function (){ displayController.gameResetter()};
+                    _wDisplay.innerHTML= "X wins"
+                }
+                else if(winner== 'o'){
+                    const _overlay= document.getElementById('overlay');
+                    const _wDisplay= document.getElementById('winDisplay');
+                    _overlay.classList.add('actived');
+                    _wDisplay.classList.add('actived');
+                    _overlay.onclick= function (){ displayController.gameResetter()};
+                    _wDisplay.onclick= function (){ displayController.gameResetter()};
+                    _wDisplay.innerHTML= "o wins"
+                }
+            }else if(gameResult== 'Draw'){
+                const _overlay= document.getElementById('overlay');
+                const _wDisplay= document.getElementById('winDisplay');
+                _overlay.classList.add('actived');
+                _wDisplay.classList.add('actived');
+                _overlay.onclick= function (){ displayController.gameResetter()};
+                _wDisplay.onclick= function (){ displayController.gameResetter()};
+                _wDisplay.innerHTML= "It's a draw"
+            }else if(gameResult== ''){}
+        };
+        const gameResetter= () =>{
+            const _overlay= document.getElementById('overlay');
+            const _wDisplay= document.getElementById('winDisplay');
+            gameResult='';
+            for (let i=0; i<gameBoard.length; i++){
+                const divElement = gameBoard[i];
+            while (divElement.firstChild) {
+                divElement.removeChild(divElement.firstChild);
+            }};
+            _overlay.classList.remove('actived');
+            _wDisplay.classList.remove('actived');
+
+
+        };
+        const buttonSelecter =() =>{
+            if(playerId== 'x'){
+                const xButton= document.getElementById('x');
+                const oButton= document.getElementById('o');
+                xButton.classList.add ('actived');
+                oButton.classList.remove ('actived');
+            
+            }else if(playerId== 'o'){
+                const xButton= document.getElementById('x');
+                const oButton= document.getElementById('o');
+                oButton.classList.add ('actived');
+                xButton.classList.remove ('actived');
+            
+            }}
 
         return{
             playerSelect,
             gameChecker,
-            drawChecker
+            drawChecker,
+            winConditioner,
+            gameResetter,
+            buttonSelecter
         }
     
 
@@ -104,8 +165,13 @@ const displayController= (() =>{
 const xSelector= document.getElementById('x');
 const oSelector= document.getElementById('o');
 
-xSelector.onclick= function(){displayController.playerSelect('x')};
-oSelector.onclick= function(){displayController.playerSelect('o')};
+xSelector.onclick= function(){displayController.playerSelect('x'),
+                                displayController.buttonSelecter(),
+                                displayController.gameResetter()};
+
+oSelector.onclick= function(){displayController.playerSelect('o'),
+                              displayController.buttonSelecter(),
+                              displayController.gameResetter()};
 
 // se crea un elemnto p con el playerId ;   se actualiza el array solo?SIM
 
@@ -117,7 +183,10 @@ const gameOn= (x) =>{
         if( divSelector().hasChildNodes()== true){
           console.log(divSelector(), divSelector().hasChildNodes())
         }
-        else{divSelector().append(newP);};
+        else{divSelector().append(newP);
+            displayController.winConditioner(),
+            displayController.gameChecker(),
+            displayController.drawChecker()};
     };
     return {
         pAdder,
@@ -127,28 +196,77 @@ const gameOn= (x) =>{
 };
 
 //      AI PLAYER
-const aiPlayer = () => {
-    if (gameResult === '' && playerId !== cpuId) {
+// const aiPlayer= ()=>{
+//     let emptyBoard= [];
+//     const emptyBoardChecker =() =>{
+//         for(let i= 0; i< gameBoard; i++){
+//             if(gameBoard[i].hasChildNodes()== true){
+//                 emptyBoard.push(gameBoard[i]);
+//             }else{} } }
+//     const aiPlay= ()=>{
+//         emptyBoardChecker();
+
+//         let _board=Math.random()* emptyBoard.length;
+//         newP= document.createElement('p');
+//         newP.innerHTML= cpuId;
+//         if( emptyBoard[_random].hasChildNodes()== true){
+//           console.log(emptyBoard[_random])
+//         }
+//         else{emptyBoard[_random].append(newP);};
+//     };
+//     return{
+//         emptyBoardChecker,
+//         aiPlay
+//     }  
         
-        const emptyCells = gameBoard.filter(cell => cell.innerText === '');
-
+    
         
-        if (emptyCells.length > 0) {
-            const randomIndex = Math.floor(Math.random() * emptyCells.length);
-            const selectedCell = emptyCells[randomIndex];
+    
+//     }
 
-            
-            selectedCell.innerText = cpuId;
-
-            
-            playerId = cpuId;
-
-            
-            displayController.gameChecker();
-            displayController.drawChecker();
-        }
-    }
-};
+    const aiPlayer = () => {
+        let emptyBoard = []; // Declarar un array vacío para almacenar elementos vacíos
+        
+        const emptyBoardChecker = () => {
+            emptyBoard = [];
+            for (let i = 0; i < gameBoard.length; i++) {
+                if (!gameBoard[i].hasChildNodes()) { // Verificar si el elemento no tiene hijos
+                    emptyBoard.push(gameBoard[i]);
+                }
+            }
+            console.log('1'+emptyBoard.length)
+        };
+        
+        const aiPlay = () => {
+            emptyBoardChecker();
+            console.log('2'+emptyBoard.length);
+            if(gameResult== ''){
+                if (emptyBoard.length > 0) { // Asegurarse de que haya elementos en emptyBoard
+                    const randomIndex = Math.floor(Math.random() * emptyBoard.length); // Generar un índice aleatorio
+                    const randomElement = emptyBoard[randomIndex]; // Obtener un elemento aleatorio del array
+                    const newP = document.createElement('p');
+                    newP.innerHTML = cpuId;
+                    randomElement.appendChild(newP); // Agregar el elemento <p> al elemento vacío seleccionado
+                    displayController.winConditioner(),
+                    displayController.gameChecker(),
+                    displayController.drawChecker();
+                    if(gameResult== ''){}
+                    else if(gameResult== 'Winner'){displayController.winConditioner(),
+                        displayController.gameChecker(),
+                        displayController.drawChecker()}
+                    else if(gameResult== 'Draw'){displayController.winConditioner(),
+                        displayController.gameChecker(),
+                        displayController.drawChecker()}
+                } else {
+                    console.log('No hay casillas vacías en el tablero.');
+            }}else {displayController.winConditioner()}
+        };
+        
+        return {
+            emptyBoardChecker,
+            aiPlay
+        };
+    };
 
 
 
@@ -157,15 +275,17 @@ function pOnClicker(x){
     let iDiv= gameOn(x);
     iDiv.pAdder();
 };
+const ai= aiPlayer();
 for(let i= 1; i< 10; i++){ //AGREGA LAS FUNCIONES NECESARIAS AL TABLERO
     let iSelector= document.getElementById(i);
     iSelector.onclick= function (){
         pOnClicker(i),
-        displayController.gameChecker(),
-        displayController.drawChecker()
+        ai.aiPlay()
+        
     };
     };
 function uno(){
 for (let i=0; i<gameBoard.length; i++){
     console.log(gameBoard[i]);
 }}
+

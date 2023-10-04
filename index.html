@@ -7,21 +7,13 @@
 </head>
 <body>
  <div class="ui">   
-    <form action="" class="difficulty">
-        <select name="level" id="level">
-            <option value="Ezzzzz">Ezzzzz</option>
-            <option value="Normal">Normal</option>
-            <option value="Soulslike">Soulslike</option>
-        </select>
-    </form>
+    
     <div class="playerSelec">
-        <button class="x" id="x">x</button> 
+        <button class="x actived" id="x">x</button> 
         <button class="o" id="o">o</button>
     </div>
     <div class="gameBoard">
-        <div class="square" id="1">
-            <p>x</p>
-        </div>
+        <div class="square" id="1"></div>
         <div class="square" id="2"></div>
         <div class="square-r" id="3"></div>
         <div class="square" id="4"></div>
@@ -32,8 +24,9 @@
         <div class="square-e" id="9"></div>
 
     </div>
-    <button class="restart">RESTART</button>
-
+    <button class="restart" onclick="displayController.gameResetter()">RESTART</button>
+<div class="overlay" id="overlay"></div>
+<div class="winDisplay" id="winDisplay"></div>
 </div>
 
 
